@@ -1,11 +1,7 @@
 package com.kulkeez.demo;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;

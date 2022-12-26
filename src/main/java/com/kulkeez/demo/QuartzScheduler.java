@@ -5,16 +5,6 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 import static org.quartz.JobBuilder.*;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -37,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class QuartzScheduler {
 	
-	private static final Logger logger = LoggerFactory.getLogger(QuartzScheduler.class);
+	private static final Logger log = LoggerFactory.getLogger(QuartzScheduler.class);
 	
 	private static String[] daysStringArray = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
 
@@ -73,7 +63,7 @@ public class QuartzScheduler {
 		scheduler = schedulerFactory.getScheduler();
 		
 		if(!scheduler.isStarted()){
-			logger.debug("Quartz Scheduler " + scheduler.getSchedulerName() + " is starting ...");
+			log.debug("Quartz Scheduler " + scheduler.getSchedulerName() + " is starting ...");
 			scheduler.start();
 		}
 	}
@@ -85,7 +75,7 @@ public class QuartzScheduler {
 	 */
 	public void stopScheduler() throws SchedulerException {
 		if(scheduler != null && scheduler.isStarted()) {
-			logger.debug("Quartz Scheduler " + scheduler.getSchedulerName() + " is shutting down ...");
+			log.debug("Quartz Scheduler " + scheduler.getSchedulerName() + " is shutting down ...");
 			scheduler.shutdown();
 		}
 	}
@@ -103,7 +93,7 @@ public class QuartzScheduler {
 		String scheduleName ="ThoughtsEventJob";
 		JobKey jobKey = new JobKey(scheduleName, "Group1");
 		
-		logger.debug("Configuring JobDetails for Thought Job...");
+		log.debug("Configuring JobDetails for Thought Job...");
 		
 		// define the job and tie it to our QuartzJob class
 		JobDetail job = newJob(ThoughtsJob.class).withIdentity(jobKey)
@@ -111,7 +101,7 @@ public class QuartzScheduler {
 				.usingJobData("RANDOM_THOUGHT", randomThought)
 				.requestRecovery(true).build();
 
-		logger.debug("Triggering the Thought Job to run now, and then repeat every 'frequency' minutes..");
+		log.debug("Triggering the Thought Job to run now, and then repeat every 'frequency' minutes..");
 		
         // Trigger the job to run now, and then repeat every 'frequency' minutes
         Trigger promotionalEventTrigger = newTrigger()
@@ -145,7 +135,7 @@ public class QuartzScheduler {
 										.requestRecovery(true).build();
 		
 		TriggerKey tKey = new TriggerKey(scheduleName, "Group1");
-		logger.debug("cronExpression = " + cronExpression);
+		log.debug("cronExpression = " + cronExpression);
 		
 		TriggerBuilder<CronTrigger> triggerBuilder = newTrigger()
 				.withIdentity(tKey)
@@ -155,7 +145,7 @@ public class QuartzScheduler {
 		
 		// Tell quartz to schedule the job using our trigger
 		scheduler.scheduleJob(jobDetails, cronTrigger);
-		logger.debug("Scheduled Quartz Job for cronTrigger = " + cronTrigger);
+		log.debug("Scheduled Quartz Job for cronTrigger = " + cronTrigger);
 	}
 	
 	
@@ -168,7 +158,7 @@ public class QuartzScheduler {
 
 		try {
         	
-			logger.debug("Grabbing the Quartz Scheduler instance...");
+			log.debug("Grabbing the Quartz Scheduler instance...");
 			
             // Grab the Scheduler instance from the Factory
             // Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -176,7 +166,7 @@ public class QuartzScheduler {
             
             // and start it off
             scheduler.startScheduler();
-            logger.debug("Quartz Scheduler started.");
+            log.debug("Quartz Scheduler started.");
     		
             //scheduled to run every one minutes but only between 8am and 11pm
             scheduler.scheduleCronJob("0 0/1 8-23 * * ?", "The pain you feel today is the strength you feel tomorrow.");
@@ -185,7 +175,7 @@ public class QuartzScheduler {
             //scheduler.shutdown();
             //logger.debug("Quartz Scheduler stopped.");
             
-            logger.info("Do notice that the main thread that launched the Quartz scheduler is now exiting.");
+            log.info("Do notice that the main thread that launched the Quartz scheduler is now exiting.");
         } 
         catch (SchedulerException se) {
             se.printStackTrace();

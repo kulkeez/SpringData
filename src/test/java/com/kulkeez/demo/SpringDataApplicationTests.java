@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import lombok.extern.slf4j.Slf4j;
 

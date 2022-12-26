@@ -1,8 +1,6 @@
 package com.kulkeez;
 
 import java.io.File;
-import java.net.URL;
-import java.util.logging.LogManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -11,10 +9,6 @@ import javax.servlet.annotation.WebListener;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,9 +42,7 @@ public final class SpringDataAppListener implements ServletContextListener {
 
         servletContext = event.getServletContext();
         servletContext.setAttribute("APP_NAME", APPLICATION_NAME);
-        
-        boolean logStatus = false;
-        
+                
         try {
         	log.info("===============================================================================");
             log.info("File Separator = " + System.getProperty("file.separator"));
@@ -125,5 +117,4 @@ public final class SpringDataAppListener implements ServletContextListener {
    		return buf.toString();
    	}	
    	
-    
 }
