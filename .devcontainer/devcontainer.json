@@ -17,15 +17,15 @@
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
 		"java.home": "/docker-java-home",
-		"java.server.launchMode": "Standard",
-    "terminal.integrated.shell.linux": "/bin/bash"
+		"java.server.launchMode": "Standard"
 	},
 	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-    "ms-kubernetes-tools.kind-vscode",
+        "ms-kubernetes-tools.kind-vscode",
 		"vscjava.vscode-java-pack",
 		"Pivotal.vscode-boot-dev-pack",
+		"ms-azuretools.vscode-docker",
 		"vscjava.vscode-azurespringcloud"
 	],
 
@@ -38,9 +38,8 @@
 	// Comment out the next line if you want to run as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode", 
     
-  "features": {
-      "github-cli": "latest",
-      "kind": "latest",
-      "powershell": "7.1"
+  	"features": {
+        "github-cli": "latest",
+        "powershell": "7.1"
   }
 } 
