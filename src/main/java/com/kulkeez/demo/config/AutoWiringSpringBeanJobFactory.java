@@ -1,4 +1,4 @@
-package com.kulkeez.demo;
+package com.kulkeez.demo.config;
 
 import org.quartz.spi.TriggerFiredBundle;
 

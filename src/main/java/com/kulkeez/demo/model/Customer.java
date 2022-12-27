@@ -1,6 +1,10 @@
-package com.kulkeez.demo;
+package com.kulkeez.demo.model;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 
 /**
  * 
@@ -8,10 +12,14 @@ import org.springframework.stereotype.Component;
  * @author kulkeez
  *
  */
-@Component
+@Entity
 public class Customer {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-    private String firstName, lastName;
+    private String firstName;
+    private String lastName;
 
 	public Customer() {
 		super();

@@ -19,6 +19,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
+import com.kulkeez.demo.config.AutoWiringSpringBeanJobFactory;
+
 /**
  * 
  * 

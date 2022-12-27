@@ -1,4 +1,4 @@
-package com.kulkeez;
+package com.kulkeez.demo;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -24,8 +24,9 @@ import org.springframework.context.annotation.Description;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.kulkeez.demo.Customer;
-import com.kulkeez.demo.StudentJDBCRepository;
+import com.kulkeez.demo.model.Customer;
+import com.kulkeez.demo.model.Employee;
+import com.kulkeez.demo.repository.EmployeeJDBCRepository;
 
 /**
  * 
@@ -55,7 +56,7 @@ import com.kulkeez.demo.StudentJDBCRepository;
 //convenience annotation that adds @Configuration, @EnableAutoConfiguration, @ComponentScan
 @SpringBootApplication
 @Slf4j
-public class SpringDataApplication implements CommandLineRunner {
+public class SpringDataApplication {
 
 	/**
 	 * Our main method delegates to Spring Boot’s SpringApplication class by calling run. 
@@ -70,51 +71,16 @@ public class SpringDataApplication implements CommandLineRunner {
 		
 		// Launch the application
         ApplicationContext ctx = SpringApplication.run(SpringDataApplication.class, args);
-		//new SpringApplicationBuilder(SpringDataApplication.class).bannerMode(Mode.ON).run(args);
-		log.info("Launched Spring Data application at time: " + tOne);
-		
+		//new SpringApplicationBuilder(SpringDataApplication.class).bannerMode(Mode.CONSOLE).run(args);
+		log.info("Launched Spring Data application at time: {} ", tOne);
 	}
 
 	@Autowired
-    JdbcTemplate jdbcTemplate;
-
+    private JdbcTemplate jdbcTemplate;
+	
     @Autowired
-    StudentJDBCRepository studentRepository;
+    EmployeeJDBCRepository employeeRepository;
        
-    //@Override
-    public void run(String... strings) throws Exception {
-    	log.info("Creating tables...");
-
-        // Fire some DDLs to create tables: STUDENT and CUSTOMERS
-        jdbcTemplate.execute("DROP TABLE student IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE student(" +
-                "id INTEGER not null, name VARCHAR(255) not null, passport_number VARCHAR(255) not null, primary key(id))");
-
-        jdbcTemplate.execute("DROP TABLE customers IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE customers(" +
-                "id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))");
-
-        // Split up the array of whole names into an array of first/last names
-        List<Object[]> splitUpNames = Arrays.asList("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long").stream()
-                .map(name -> name.split(" "))
-                .collect(Collectors.toList());
-
-        // Use a Java 8 stream to print out each tuple of the list
-        splitUpNames.forEach(name -> log.info(String.format("Inserting customer record for %s %s", name[0], name[1])));
-
-        // Uses JdbcTemplate's batchUpdate operation to bulk load data
-        jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", splitUpNames);
-
-        // Finally, use the query method to search your table for records matching the criteria.
-        log.info("Querying for customer records where first_name = 'Josh':");
-        jdbcTemplate.query(
-                "SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" },
-                (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
-        ).forEach(customer -> log.info(customer.toString()));
-        
-        log.info("STUDENT Table Count: ", studentRepository.getStudentCount());
-    }	 
-    
 	
 	/**
 	 * This method runs on start up, retrieves all the beans that were created either by your app or 
@@ -143,6 +109,33 @@ public class SpringDataApplication implements CommandLineRunner {
             }
 
             log.info("Total Beans available in the Spring Container: " + ctx.getBeanDefinitionCount());
+            
+        	log.info("Initializing Database...");
+        	jdbcTemplate.execute("DROP TABLE EMPLOYEE IF EXISTS");
+        	
+        	jdbcTemplate.execute("CREATE TABLE EMPLOYEE \r\n"
+        			+ "(\r\n"
+        			+ "	ID int NOT NULL PRIMARY KEY,\r\n"
+        			+ "	FIRST_NAME varchar(255),\r\n"
+        			+ "	LAST_NAME varchar(255),\r\n"
+        			+ "	ADDRESS varchar(255)\r\n"
+        			+ ");");
+        	
+        	List<Employee> employees = Arrays.asList(
+                    new Employee(5L, "John", "McGinn", "Munich"),
+                    new Employee(6L, "Ralf", "Reddin", "Dusseldorf"),
+                    new Employee(7L, "Mark", "Greer", "Atlanta")
+            );
+
+            log.info("Populating EMPLOYEE table...");
+            employees.forEach(emp -> {
+                log.debug("Saving...[{}]", emp.getFirstName() + " " + emp.getLastName());
+                employeeRepository.create(emp);
+            });
+            
+            log.info("EMPLOYEE Table Count: {}", employeeRepository.count());
+            log.info("Looking up Employee #7: {}", employeeRepository.findById(7L));
+            
         };
     }
 

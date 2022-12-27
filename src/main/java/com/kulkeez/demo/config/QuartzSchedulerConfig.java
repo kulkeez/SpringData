@@ -1,4 +1,4 @@
-package com.kulkeez.demo;
+package com.kulkeez.demo.config;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -10,9 +10,6 @@ import org.quartz.Scheduler;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +25,10 @@ import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
+import com.kulkeez.demo.SampleJob;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Configuring the Quartz beans using Spring
  * 
@@ -35,13 +36,13 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
  *
  */
 @Configuration
+@Slf4j
 @ConditionalOnProperty(name = "quartz.enabled")
 public class QuartzSchedulerConfig {
-	private static final Logger logger = LoggerFactory.getLogger(QuartzSchedulerConfig.class);
 	
     @Bean
     public JobFactory jobFactory(ApplicationContext applicationContext) {
-    	logger.info("Injecting & configuring Quartz Job factory for auto-wiring support...");
+    	log.info("Injecting & configuring Quartz Job factory for auto-wiring support...");
         AutoWiringSpringBeanJobFactory jobFactory = new AutoWiringSpringBeanJobFactory();
         jobFactory.setApplicationContext(applicationContext);
         return jobFactory;
@@ -58,7 +59,7 @@ public class QuartzSchedulerConfig {
 
         schedulerFactory.setQuartzProperties(quartzProperties());
         schedulerFactory.afterPropertiesSet();
-        logger.info("Configured Quartz Scheduler factory bean.");
+        log.info("Configured Quartz Scheduler factory bean.");
         
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.setJobFactory(jobFactory);
@@ -66,7 +67,7 @@ public class QuartzSchedulerConfig {
 //        scheduler.scheduleJob((JobDetail) sampleJobTrigger.getJobDataMap().get("jobDetail"), sampleJobTrigger);
        
         scheduler.start();
-        logger.info("Quartz Scheduler injected via Spring and started!!!");
+        log.info("Quartz Scheduler injected via Spring and started!!!");
         return scheduler;
     }
 
@@ -80,21 +81,21 @@ public class QuartzSchedulerConfig {
 
     @Bean(name = "sampleJobDetail")
     public JobDetailFactoryBean sampleJobDetail() {
-    	logger.debug("Creating SampleJob details...");
+    	log.debug("Creating SampleJob details...");
         return createJobDetail(SampleJob.class);
     }
 
     @Bean(name = "sampleJobTrigger")
     public SimpleTriggerFactoryBean sampleJobTrigger(@Qualifier("sampleJobDetail") JobDetail jobDetail,
                                                      @Value("${samplejob.frequency}") long frequency) {
-    	logger.debug("Creating SampleJob Trigger...");
+    	log.debug("Creating SampleJob Trigger...");
         return createTrigger(jobDetail, frequency);
     }
 
     @Bean(name = "sampleCronJobTrigger")
     public CronTriggerFactoryBean sampleCronJobTrigger(@Qualifier("sampleJobDetail") JobDetail jobDetail,
                                                      @Value("${samplejob.cron.expression}") String cronExpression) {
-    	logger.debug("Creating SampleCronJob Trigger...");
+    	log.debug("Creating SampleCronJob Trigger...");
         return createCronTrigger(jobDetail, cronExpression);
     }
     
@@ -121,7 +122,7 @@ public class QuartzSchedulerConfig {
      */
     private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs) {
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
-        logger.debug("Creating Trigger for job: " + jobDetail);
+        log.debug("Creating Trigger for job: " + jobDetail);
         
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(0L);
@@ -144,7 +145,7 @@ public class QuartzSchedulerConfig {
      */
     private static CronTriggerFactoryBean createCronTrigger(JobDetail jobDetail, String cronExpression) {
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
-        logger.debug("Creating Cron Trigger using cron expression: " + cronExpression + " for job: " + jobDetail);
+        log.debug("Creating Cron Trigger using cron expression: " + cronExpression + " for job: " + jobDetail);
         
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setCronExpression(cronExpression);

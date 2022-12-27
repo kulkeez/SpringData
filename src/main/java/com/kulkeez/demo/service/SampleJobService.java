@@ -1,9 +1,8 @@
-package com.kulkeez.demo;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.kulkeez.demo.service;
 
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -18,20 +17,19 @@ import org.springframework.stereotype.Service;
 // and marks this java class as a bean so that the component-scanning mechanism of Spring can pick it up 
 // and pull it into the application context.
 @Service
+@Slf4j
 public class SampleJobService {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public void executeSampleJob() {
         try {
-        	logger.info("Running Database health check...");
+        	log.info("Running Database health check...");
             Thread.sleep(5000);
         } 
         catch (InterruptedException e) {
-            logger.error("Error while executing sample job", e);
+            log.error("Error while executing sample job", e);
         } 
         finally {
-            logger.info("Scheduled Database health check finished.");
+            log.info("Scheduled Database health check finished.");
         }
     }
 }
