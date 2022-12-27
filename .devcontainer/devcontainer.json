@@ -23,6 +23,16 @@
 		"vscjava.vscode-java-pack",
 		"Pivotal.vscode-boot-dev-pack"
 	],
+
+	"customizations": {
+		"codespaces": {
+		  "openFiles": [
+			"README.md",
+			"pom.xml",
+			"src/main/java/com/kulkeez/SpringDataApplication.java"
+		  ]
+		}
+	},
 	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8080],
