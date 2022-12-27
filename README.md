@@ -1,5 +1,7 @@
 Congratulations! You have just developed a web application using Spring Boot and Spring JDBC using H2 in-memory database and Quartz scheduling. 
-This application also registers with a Spring Boot Admin (SBA) Server.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=582372347&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=SouthEastAsia)
+
 
 Note: Although it is possible to package this service as a traditional web application archive or WAR file 
 for deployment to an external application server, the simpler approach demonstrated below creates a 
