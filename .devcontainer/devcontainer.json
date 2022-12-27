@@ -18,6 +18,12 @@
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
 	},
 
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"Pivotal.vscode-boot-dev-pack"
+	],
+	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8080],
 
