@@ -155,14 +155,14 @@ public class QuartzScheduler {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		QuartzScheduler scheduler = null;
 		try {
         	
 			log.debug("Grabbing the Quartz Scheduler instance...");
 			
             // Grab the Scheduler instance from the Factory
             // Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-            QuartzScheduler scheduler = QuartzScheduler.getInstance();
+            scheduler = QuartzScheduler.getInstance();
             
             // and start it off
             scheduler.startScheduler();
@@ -171,15 +171,21 @@ public class QuartzScheduler {
             //scheduled to run every one minutes but only between 8am and 11pm
             scheduler.scheduleCronJob("0 0/1 8-23 * * ?", "The pain you feel today is the strength you feel tomorrow.");
             //scheduler.scheduleThoughtEventJob(1, "testEvent");
-            
-            //scheduler.shutdown();
-            //logger.debug("Quartz Scheduler stopped.");
-            
-            log.info("Do notice that the main thread that launched the Quartz scheduler is now exiting.");
+                       
+            log.debug("Do notice that the main thread that launched the Quartz scheduler is now exiting.");
         } 
         catch (SchedulerException se) {
             se.printStackTrace();
         }
+		finally {
+			try {
+				scheduler.stopScheduler();
+			} 
+			catch (SchedulerException e) {
+				e.printStackTrace();
+			}
+			log.debug("Quartz Scheduler stopped.");			
+		}
     }
 	
 
