@@ -101,13 +101,24 @@ public class SpringDataApplication {
 
             String[] beanNames = ctx.getBeanDefinitionNames();
             Arrays.sort(beanNames);
+            
             for (String beanName : beanNames) {
-            	if(beanName.startsWith("quartz") || beanName.contains("quartz") || beanName.contains("Quartz") 
+            	if(beanName.startsWith("quartz") 
+            			|| beanName.contains("quartz") 
+            			|| beanName.contains("Quartz") 
             			|| beanName.contains("Job") || beanName.contains("schedule"))
             		log.debug(beanName);
-                
             }
 
+            log.debug("Spring Data JPA related beans:");
+            for (String beanName : beanNames) {
+	        	if(beanName.contains(".data") 
+	        			|| beanName.contains("hibernate") 
+	        			|| beanName.contains(".jpa") 
+	        			|| beanName.contains("Template")) 
+	        		log.debug(beanName);
+            }
+        	
             log.info("Total Beans available in the Spring Container: " + ctx.getBeanDefinitionCount());
             
         	log.info("Initializing Database...");
