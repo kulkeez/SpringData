@@ -9,6 +9,10 @@ standalone application. You package everything in a single, executable JAR file,
 a good old Java main() method. We use Spring’s support for embedding the Tomcat servlet container 
 as the HTTP runtime, instead of deploying to an external instance.
 
+A quick test can be performed using the link below to check if this Spring Boot application is UP: 
+ * http://localhost:8080/
+   
+
 Various Actuator RESTful end points which are added to this application are: 
  * http://localhost:8080/actuator/health
  * http://localhost:8080/actuator/info 
@@ -25,3 +29,7 @@ $ curl 'http://localhost:8080/actuator/shutdown' -i -X POST or using Postman. Yo
 
 For more on Actuator end points documentation, check here: https://docs.spring.io/spring-boot/docs/2.7.6/actuator-api/html/#shutdown
 For Spring Boot Documentation, refer here: https://docs.spring.io/spring-boot/docs/2.7.6/reference/htmlsingle/
+
+### Want to run it?
+This Spring Boot application can also be launched from command-line by the developer using the command: ```mvn spring-boot:run ```
+
