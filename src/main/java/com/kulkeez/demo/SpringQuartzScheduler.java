@@ -1,6 +1,6 @@
 package com.kulkeez.demo;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
